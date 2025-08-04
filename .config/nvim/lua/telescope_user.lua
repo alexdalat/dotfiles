@@ -1,4 +1,5 @@
 
+local wk = require("which-key")
 local telescope = require("telescope")
 
 -- keybinds --

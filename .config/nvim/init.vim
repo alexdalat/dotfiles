@@ -38,6 +38,8 @@ call plug#begin('~/.config/nvim/plugged/')
     Plug 'hrsh7th/cmp-vsnip'
         Plug 'hrsh7th/vim-vsnip'
     Plug 'https://github.com/ray-x/lsp_signature.nvim'
+    Plug 'https://github.com/nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        Plug 'https://github.com/Badhi/nvim-treesitter-cpp-tools.git'
 
     " Editing
     Plug 'https://github.com/NMAC427/guess-indent.nvim'
@@ -47,6 +49,7 @@ call plug#begin('~/.config/nvim/plugged/')
         Plug 'https://github.com/alfaix/neotest-gtest'
         Plug 'https://github.com/nvim-neotest/neotest-python'
     Plug 'https://github.com/folke/todo-comments.nvim'  " TODO highlighting
+    Plug 'https://github.com/L3MON4D3/LuaSnip.git'
 
 
     " Debugging
@@ -57,6 +60,7 @@ call plug#begin('~/.config/nvim/plugged/')
             Plug 'https://github.com/folke/neodev.nvim'
             Plug 'https://github.com/theHamsta/nvim-dap-virtual-text'
                 Plug 'https://github.com/nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        Plug 'https://github.com/nvim-telescope/telescope-dap.nvim.git'
 
     " Profiling
     Plug 'https://github.com/t-troebst/perfanno.nvim'
@@ -92,17 +96,20 @@ call plug#begin('~/.config/nvim/plugged/')
 
 call plug#end()
 
-lua require('utils')
-lua require('sessions')
-lua require('init')
 lua require('debugging')
+lua require('folds')
+lua require('init')
+lua require('keybinds')
 lua require('lsp')
 lua require('navigation')
-lua require('keybinds')
-lua require('profiling')
-lua require('overseer_user')
-lua require('folds')
 lua require('neotest_user')
+lua require('overseer_user')
+lua require('profiling')
+lua require('sessions')
+lua require('snippets')
+lua require('telescope_user')
+lua require('treesitter')
+lua require('utils')
 
 "let g:asyncrun_open = 6  " Setup
 "let g:asynctasks_confirm = 0  " Don't ask to name file
