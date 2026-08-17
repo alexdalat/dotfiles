@@ -11,6 +11,8 @@ vim.opt.timeoutlen = 100 -- faster whichkey
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
 
+-- Disable recording macros
+vim.keymap.set('n', 'q', '<Nop>', { noremap = true, silent = true })
 
 function _G.relative_file_path()
     return vim.fn.substitute(vim.fn.expand('%'), '^' .. vim.fn.getcwd() .. '/', '', '')
