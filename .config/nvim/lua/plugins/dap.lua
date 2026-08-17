@@ -74,10 +74,18 @@ if vim.fn.has('macunix') == 1 then
         name = 'lldb'
     }
 
-    if not dap.adapters.lldb.command then
-        vim.notify('LLDB not found', vim.log.levels.WARN)
-    else
-        --vim.notify('LLDB found at ' .. dap.adapters.lldb.command, vim.log.levels.INFO)
+    local c_ft = {
+      ["c"] = true,
+      ["cpp"] = true,
+      ["c++"] = true,       -- if your setup uses "c++"
+      ["h"] = true,
+      ["hpp"] = true,
+    }
+    
+    if c_ft[vim.bo.filetype] then
+      if not dap.adapters.lldb.command then
+        vim.notify("LLDB not found", vim.log.levels.WARN)
+      end
     end
 
     dap.configurations.cpp = {
@@ -124,22 +132,6 @@ require("neodev").setup({
     library = { plugins = { "nvim-dap-ui" }, types = true },
 })
 
----@diagnostic disable-next-line: missing-fields
-require 'nvim-treesitter.configs'.setup {
-    ensure_installed = { "cpp", "lua", "vim", "vimdoc", "python", "bash", "json", "yaml", "html", "css", "javascript" },
-    sync_install = true,
-
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
-    ignore_install = {},
-
-    highlight = {
-        enable = true,
-
-        -- NOTE: these are the names of the parsers and not the filetype.
-        disable = { "c", "rust" },
-    },
-}
 
 require("nvim-dap-virtual-text").setup {
     enabled = true,

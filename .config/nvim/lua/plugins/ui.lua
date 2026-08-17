@@ -1,9 +1,3 @@
--- keybinds
-local wk = require("which-key")
-
--- Guess Indent
-require('guess-indent').setup {}
-
 -- Catppuccin
 require("catppuccin").setup({
   flavour = "macchiato",
@@ -16,19 +10,10 @@ require("catppuccin").setup({
 })
 vim.cmd.colorscheme "catppuccin"
 
--- disable auto commenting new lines
-vim.cmd("autocmd BufEnter * set formatoptions-=cro")
-vim.cmd("autocmd BufEnter * setlocal formatoptions-=cro")
-
 -- notify
 vim.notify = require("notify")
--- vim.notify("Hello world.", "info", {
---     title = "Hello",
---     timeout = 5000,
---     icon = "",
--- })
 
---require('gitsigns').setup()  -- resides in %s column, shows line git status
+require('gitsigns').setup()  -- resides in %s column, shows line git status
 
 -- statuscol
 local builtin = require("statuscol.builtin")
@@ -49,35 +34,10 @@ require("statuscol").setup({
 })
 
 
--- Dashboard
-local starter = require('mini.starter')
-starter.setup({
-  items = {
-    starter.sections.telescope(),
-  },
-  content_hooks = {
-    starter.gen_hook.adding_bullet(),
-    starter.gen_hook.aligning('center', 'center'),
-  },
-})
-
-
 -- Mini starter
-local status, starter = pcall(require, "mini.starter")
-if not status then
-  return
-end
+local starter = require("mini.starter")
 
 local footer_n_seconds = function()
-  --local timer = vim.loop.new_timer()
-  --timer:start(0, 1000, vim.schedule_wrap(function()
-  --  if vim.bo.filetype ~= 'starter' then
-  --    timer:stop()
-  --    return
-  --  end
-  --  --starter.refresh() -- messes with cursor
-  --end))
-
   return function()
     return os.date("%A, %B %d, %Y %I:%M:%S %p")
   end
@@ -101,7 +61,6 @@ starter.setup({
   items = {
     -- Use this if you set up 'mini.sessions'
     starter.sections.sessions(5, true),
-    --{ action = "tab G", name = "G: Fugitive", section = "Git" },
     { action = "Telescope find_files", name = "F: Find File", section = "Telescope" },
     { action = "Telescope grep_string", name = "G: Grep String", section = "Telescope" },
     { action = "PlugInstall", name = "U: Update Plugins", section = "Plugins" },
@@ -118,17 +77,3 @@ vim.cmd([[
     au User MiniStarterOpened nmap <buffer> <C-p> <Cmd>Telescope find_files<CR>
   augroup END
 ]])
-
-
--- todo-comments
-local td = require('todo-comments')
-td.setup{}
-
-wk.add({
-  mode = "n",
-  { "<leader>T", group = "Todo Comments" },
-  { "<leader>Tn", function() td.jump_next() end, desc = "Next" },
-  { "<leader>Tp", function() td.jump_prev() end, desc = "Prev" },
-  { "<leader>TT", ":TodoTelescope keywords=TODO,FIX<CR>", desc = "Todo Telescope" },
-  { "<leader>TN", ":TodoTelescope keywords=NOTE<CR>", desc = "Note Telescope" },
-})

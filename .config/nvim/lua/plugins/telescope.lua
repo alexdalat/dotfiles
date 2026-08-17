@@ -3,9 +3,10 @@ local wk = require("which-key")
 local telescope = require("telescope")
 
 -- keybinds --
+local wk = require("which-key")
 wk.add({
   mode = { "n", "v" },
-  -- group defined in navigation.lua
+  -- group defined in keybinds.lua
   { "<leader>tf", ":Telescope find_files<CR>", desc = "Find file" },
   { "<leader>tb", ":Telescope buffers<CR>", desc = "Find buffer" },
   { "<leader>tH", ":Telescope help_tags<CR>", desc = "Find help" },
@@ -13,9 +14,6 @@ wk.add({
 })
 -- end keybinds --
 
-
--- dap extension
-require('telescope').load_extension('dap')
 
 -- perfanno extension
 local perfanno_actions = telescope.extensions.perfanno.actions

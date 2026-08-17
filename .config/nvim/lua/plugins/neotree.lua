@@ -61,26 +61,3 @@ require 'neo-tree'.setup {
         },
     },
 }
-
-local telescope = require("telescope")
-local perfanno_actions = telescope.extensions.perfanno.actions
-telescope.setup {
-    extensions = {
-        perfanno = {
-            -- Special mappings in the telescope finders
-            mappings = {
-                ["i"] = {
-                    -- Find hottest callers of selected entry
-                    ["<C-h>"] = perfanno_actions.hottest_callers,
-                    -- Find hottest callees of selected entry
-                    ["<C-l>"] = perfanno_actions.hottest_callees,
-                },
-
-                ["n"] = {
-                    ["gu"] = perfanno_actions.hottest_callers,
-                    ["gd"] = perfanno_actions.hottest_callees,
-                }
-            }
-        }
-    }
-}

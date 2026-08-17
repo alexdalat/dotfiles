@@ -1,29 +1,3 @@
-
-
-set number
-set wrap
-
-set tabstop=2
-set shiftwidth=2
-set expandtab " 4-spaces instead of tab indentation
-
-set timeoutlen=100  " faster whichkey
-
-set spell spelllang=en_us
-
-
-function! RelativeFilePath()
-    return substitute(expand('%'), '^' . getcwd() . '/', '', '')
-endfunction
-
-set winbar=%t\ 
-set winbar+=%m
-
-set statusline=%{RelativeFilePath()}\ 
-set statusline+=%y\                     " File type
-set statusline+=%=                      " Left/right separation
-set statusline+=%l/%L,\ %c\                  " Line and column number
-
 call plug#begin('~/.config/nvim/plugged/')
 
     " LSP
@@ -38,7 +12,7 @@ call plug#begin('~/.config/nvim/plugged/')
     Plug 'hrsh7th/cmp-vsnip'
         Plug 'hrsh7th/vim-vsnip'
     Plug 'https://github.com/ray-x/lsp_signature.nvim'
-    Plug 'https://github.com/nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'https://github.com/nvim-treesitter/nvim-treesitter', {'branch': 'master', 'do': ':TSUpdate'}
         Plug 'https://github.com/Badhi/nvim-treesitter-cpp-tools.git'
 
     " Editing
@@ -59,7 +33,7 @@ call plug#begin('~/.config/nvim/plugged/')
             Plug 'nvim-neotest/nvim-nio'
             Plug 'https://github.com/folke/neodev.nvim'
             Plug 'https://github.com/theHamsta/nvim-dap-virtual-text'
-                Plug 'https://github.com/nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+                Plug 'https://github.com/nvim-treesitter/nvim-treesitter', {'branch': 'master', 'do': ':TSUpdate'}
         Plug 'https://github.com/nvim-telescope/telescope-dap.nvim.git'
 
     " Profiling
@@ -96,29 +70,30 @@ call plug#begin('~/.config/nvim/plugged/')
 
 call plug#end()
 
-lua require('debugging')
-lua require('folds')
-lua require('init')
-lua require('keybinds')
-lua require('lsp')
-lua require('navigation')
-lua require('neotest_user')
-lua require('overseer_user')
-lua require('profiling')
-lua require('sessions')
-lua require('snippets')
-lua require('telescope_user')
-lua require('treesitter')
-lua require('utils')
-
+" asynctasks (plugin currently disabled above)
 "let g:asyncrun_open = 6  " Setup
 "let g:asynctasks_confirm = 0  " Don't ask to name file
 "let g:asynctasks_term_pos = 'bottom'  " Open terminal at bottom (not quickfix)
 
+lua require('options')
+" sets mapleader, so it precedes every <leader> mapping
+lua require('keymaps')
+lua require('utils')
+" mini.sessions must precede mini.starter, which reads its session list
+lua require('sessions')
 
-" TrueColor stuff
-if !has('gui_running') && &term =~ '\%(screen\|tmux\)'
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-endif
-set termguicolors
+lua require('plugins.ui')
+lua require('plugins.editing')
+" before dap: nvim-dap-virtual-text depends on treesitter
+lua require('plugins.treesitter')
+lua require('plugins.dap')
+" before lsp: servers pick up cmp capabilities
+lua require('plugins.completion')
+lua require('snippets')
+lua require('plugins.lsp')
+lua require('plugins.neotree')
+lua require('plugins.telescope')
+lua require('plugins.perfanno')
+lua require('plugins.overseer')
+lua require('plugins.ufo')
+lua require('plugins.neotest')

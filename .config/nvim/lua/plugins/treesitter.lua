@@ -1,3 +1,5 @@
+-- tarball fetch returns unparseable archives here; clone instead
+require('nvim-treesitter.install').prefer_git = true
 
 ---@diagnostic disable-next-line: missing-fields
 require 'nvim-treesitter.configs'.setup {
@@ -5,7 +7,7 @@ require 'nvim-treesitter.configs'.setup {
     sync_install = true,
 
     -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = true,
+    auto_install = false,
     ignore_install = {},
 
     highlight = {
@@ -15,11 +17,3 @@ require 'nvim-treesitter.configs'.setup {
         disable = { "c", "rust" },
     },
 }
-
--- for creating C++ implementations
-require 'nt-cpp-tools'.setup({
-    preview = {
-        quit = 'q', -- optional keymapping for quit preview
-        accept = '<CR>' -- optional keymapping for accept preview
-    },
-})

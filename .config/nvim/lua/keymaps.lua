@@ -1,14 +1,7 @@
 
--- Key binds
+-- must be set before any <leader> mapping is resolved
 vim.g.mapleader = ','
 
-
--- Copilot
-vim.g.copilot_no_tab_map = true
-vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-
-
--- Which-key
 local wk = require("which-key")
 wk.setup()
 
@@ -31,8 +24,8 @@ wk.add({
 -- Non-leader (normal mode only)
 wk.add({
   mode = "n",
-  { "[d", vim.diagnostic.goto_prev, desc = "Previous diagnostic" },
-  { "]d", vim.diagnostic.goto_next, desc = "Next diagnostic" },
+  { "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, desc = "Previous diagnostic" },
+  { "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, desc = "Next diagnostic" },
 
   { "<C-s>", ":w<CR>", desc = "Save" },
   { "<C-p>", require('telescope.builtin').find_files, desc = "Find file" },
