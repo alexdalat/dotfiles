@@ -1,19 +1,21 @@
--- tarball fetch returns unparseable archives here; clone instead
-require('nvim-treesitter.install').prefer_git = true
-
----@diagnostic disable-next-line: missing-fields
-require 'nvim-treesitter.configs'.setup {
-    ensure_installed = { "cpp", "lua", "vim", "vimdoc", "python", "bash", "json", "yaml", "html", "css", "javascript" },
-    sync_install = true,
-
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
-    ignore_install = {},
-
-    highlight = {
-        enable = true,
-
-        -- NOTE: these are the names of the parsers and not the filetype.
-        disable = { "c", "rust" },
-    },
+-- main branch fetches parsers with curl+tar only; the master-branch prefer_git
+-- escape hatch is gone. A bad archive now fails loudly (curl --fail), see :TSLog.
+require('nvim-treesitter').install {
+    "cpp", "lua", "vim", "vimdoc", "python", "bash", "json", "yaml", "html", "css", "javascript"
 }
+
+-- names of parsers, not filetypes
+local disabled = { c = true, rust = true }
+
+vim.api.nvim_create_autocmd('FileType', {
+    callback = function(args)
+        local lang = vim.treesitter.language.get_lang(args.match)
+        if not lang or disabled[lang] then
+            return
+        end
+        -- most filetypes have no parser installed; that is not an error
+        if vim.treesitter.language.add(lang) then
+            vim.treesitter.start(args.buf, lang)
+        end
+    end,
+})

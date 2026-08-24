@@ -1,7 +1,6 @@
 
 require("neotest").setup({
   adapters = {
-    require("neotest-gtest").setup({}),
     require("neotest-python")({
       runner = "pytest",
 

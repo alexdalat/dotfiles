@@ -21,11 +21,16 @@ wk.add({
   { "<leader>sv", ':vsplit<CR>', desc = "Split vertical" },
 })
 
+-- 'float' in JumpOpts is deprecated since 0.12; the float is driven from on_jump instead
+local function diagnostic_float(_, bufnr)
+  vim.diagnostic.open_float({ bufnr = bufnr, scope = "cursor", focus = false })
+end
+
 -- Non-leader (normal mode only)
 wk.add({
   mode = "n",
-  { "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, desc = "Previous diagnostic" },
-  { "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, desc = "Next diagnostic" },
+  { "[d", function() vim.diagnostic.jump({ count = -1, on_jump = diagnostic_float }) end, desc = "Previous diagnostic" },
+  { "]d", function() vim.diagnostic.jump({ count = 1, on_jump = diagnostic_float }) end, desc = "Next diagnostic" },
 
   { "<C-s>", ":w<CR>", desc = "Save" },
   { "<C-p>", require('telescope.builtin').find_files, desc = "Find file" },

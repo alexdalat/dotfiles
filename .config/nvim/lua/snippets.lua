@@ -1,5 +1,3 @@
--- cmp connections are done in lsp.lua
-
 local ls = require("luasnip")
 
 require("luasnip.loaders.from_vscode").lazy_load() -- load snippets from friendly-snippets

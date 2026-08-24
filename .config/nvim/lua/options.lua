@@ -8,6 +8,8 @@ vim.opt.expandtab = true
 
 vim.opt.timeoutlen = 100 -- faster whichkey
 
+vim.opt.mousescroll = "ver:1,hor:2" -- default ver:3 overshoots with a trackpad
+
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
 
@@ -18,7 +20,9 @@ function _G.relative_file_path()
     return vim.fn.substitute(vim.fn.expand('%'), '^' .. vim.fn.getcwd() .. '/', '', '')
 end
 
-vim.opt.winbar = "%t %m"
+-- aerial_crumb() is defined in plugins/aerial.lua; plain %{} so symbol names
+-- containing '%' are not re-parsed as statusline items
+vim.opt.winbar = "%t %m %{v:lua.aerial_crumb()}"
 
 vim.opt.statusline = table.concat({
     "%{v:lua.relative_file_path()} ",

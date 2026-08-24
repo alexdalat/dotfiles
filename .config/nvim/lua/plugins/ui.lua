@@ -2,7 +2,6 @@
 require("catppuccin").setup({
   flavour = "macchiato",
   integrations = {
-    cmp = true,
     neotree = true,
     treesitter = true,
     notify = true,
@@ -15,21 +14,34 @@ vim.notify = require("notify")
 
 require('gitsigns').setup()  -- resides in %s column, shows line git status
 
+require('neoscroll').setup({
+  mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb' },
+  duration_multiplier = 1.0,
+  easing = 'linear', -- default linear
+  ignored_events = {}, -- apply to all events (I think)
+  hide_cursor = false
+})
+
 -- statuscol
 local builtin = require("statuscol.builtin")
 require("statuscol").setup({
   segments = {
+    { text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
+    -- diagnostics and gitsigns each get their own 1-cell column; sharing the
+    -- native "%s" sign column makes them overwrite each other on the same line
     {
-      text = { builtin.foldfunc, " " },  -- fold
-      condition = { true, builtin.not_empty },
-      click = "v:lua.ScFa"
+      sign = { namespace = { "diagnostic" }, maxwidth = 1, colwidth = 1, auto = true },
+      click = "v:lua.ScSa",
     },
-    { text = { "%s" }, click = "v:lua.ScSa" },  -- git line
     {
-      text = { builtin.lnumfunc, " " },  -- line number
+      sign = { namespace = { "gitsigns" }, maxwidth = 1, colwidth = 1, auto = true, wrap = true },
+      click = "v:lua.ScSa",
+    },
+    {
+      text = { builtin.lnumfunc, " " },
       condition = { true, builtin.not_empty },
       click = "v:lua.ScLa",
-    }
+    },
   },
 })
 
@@ -63,7 +75,7 @@ starter.setup({
     starter.sections.sessions(5, true),
     { action = "Telescope find_files", name = "F: Find File", section = "Telescope" },
     { action = "Telescope grep_string", name = "G: Grep String", section = "Telescope" },
-    { action = "PlugInstall", name = "U: Update Plugins", section = "Plugins" },
+    { action = vim.pack.update, name = "U: Update Plugins", section = "Plugins" },
     { action = "enew",        name = "E: New Buffer",     section = "Builtin actions" },
     { action = "qall!",       name = "Q: Quit Neovim",    section = "Builtin actions" },
   },

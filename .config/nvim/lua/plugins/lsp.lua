@@ -67,11 +67,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
--- applies to mason-enabled servers too, which previously got no cmp capabilities
-vim.lsp.config('*', { capabilities = capabilities })
-
 -- Other manually setup servers:
 -- Lua
 vim.lsp.config('lua_ls', {
@@ -106,6 +101,17 @@ vim.lsp.config('clangd', {
         "--clang-tidy",
         "--fallback-style=Google",
     },
+})
+
+-- Python: point pyright at the project's .venv instead of the PATH python
+vim.lsp.config('pyright', {
+    on_init = function(client)
+        local py = (client.root_dir or vim.fn.getcwd()) .. '/.venv/bin/python'
+        if vim.uv.fs_stat(py) then
+            client.settings = vim.tbl_deep_extend('force', client.settings or {},
+                { python = { pythonPath = py } })
+        end
+    end,
 })
 
 vim.lsp.enable({ 'lua_ls', 'clangd' })

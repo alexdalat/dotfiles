@@ -11,6 +11,7 @@ wk.add({
   { "<leader>tb", ":Telescope buffers<CR>", desc = "Find buffer" },
   { "<leader>tH", ":Telescope help_tags<CR>", desc = "Find help" },
   { "<leader>tg", ":Telescope live_grep<CR>", desc = "Find string" },
+  { "<leader>ta", ":Telescope aerial<CR>", desc = "Find symbol" },
 })
 -- end keybinds --
 
@@ -19,6 +20,10 @@ wk.add({
 local perfanno_actions = telescope.extensions.perfanno.actions
 telescope.setup {
     extensions = {
+        aerial = {
+            col1_width = 4,
+            show_columns = "both",
+        },
         perfanno = {
             -- Special mappings in the telescope finders
             mappings = {
@@ -37,3 +42,5 @@ telescope.setup {
         }
     }
 }
+
+telescope.load_extension("aerial")
